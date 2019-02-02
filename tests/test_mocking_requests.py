@@ -12,3 +12,9 @@ class TestExternalAPI(unittest.TestCase):
         a = 1
         b = 2
         self.assertEqual(a + b, 3)
+
+
+class TestPropertyMocking(unittest.TestCase):
+
+    def test_mocking_property(self):
+        pass
