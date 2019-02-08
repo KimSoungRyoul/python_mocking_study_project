@@ -9,7 +9,20 @@ def send_authentication_mail():
     pass
 
 
+class ModelManager(object):
+    def filter(self):
+        pass
+
+    def get(self):
+        pass
+
+    def exists(self):
+        pass
+
+
 class User(object):
+    objects = ModelManager
+
     user_id: str
     password: str
     email: str
