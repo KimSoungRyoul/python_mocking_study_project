@@ -2,6 +2,8 @@ from datetime import datetime
 from enum import Enum
 from typing import List
 
+from django.db import models
+
 from shopping_mall.payment_utils import request_naver_pay
 
 
@@ -20,7 +22,7 @@ class ModelManager(object):
         pass
 
 
-class User(object):
+class User(models.Model):
     objects = ModelManager
 
     user_id: str
@@ -31,6 +33,11 @@ class User(object):
     @property
     def is_expired_password_period(self):
         return '비밀번호 변경 아직 안해도 됩니다.' if self.password_updated_at > datetime.datetime.now() else '비번 변경해야됩니다'
+
+
+class Coupon(object):
+    title: str
+    owner = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
 
 
 class Product(object):

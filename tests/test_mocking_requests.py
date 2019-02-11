@@ -4,7 +4,7 @@ from http import HTTPStatus
 from unittest.mock import patch, PropertyMock
 
 from shopping_mall import api
-from shopping_mall.models import Order, User
+from shopping_mall.models import Order, User, Coupon
 
 
 class TestWithMocking(unittest.TestCase):
@@ -38,16 +38,25 @@ class TestWithMocking(unittest.TestCase):
 
         self.assertEqual(user.is_expired_password_period, '목킹당함!!')
 
-    @patch('shopping_mall.models.User.objects')
-    def test_foo_something_exist_returns_none(self, mock_model):
+    @patch('shopping_mall.models.Coupon.objects')
+    def test_mocking_model_objects(self, mock_objects):
         # just to show how to do it with longer chains
         # mock_foo.filter.return_value = mock_foo
         # mock_foo.exclude.return_value = mock_foo
-        mock_model.get.return_value.email = 'KimSoungRyoul@gmail.com'
-        mock_model.exists.return_value = False
+        user = User()
+        user.user_id = 'KimSoungRyoul@gmail.com'
+        mock_objects.get.return_value.owner = user
+        mock_objects.get.return_value.title = '친구 추천 쿠폰'
+        mock_objects.exists.return_value = False
 
-        self.assertEqual(User.objects.get(id=1).email, 'KimSoungRyoul@gmail.com')
+        self.assertEqual(User.objects.get(id=1).user.user_id, 'KimSoungRyoul@gmail.com')
+        self.assertEqual(User.objects.get(id='파라메터 값에 영향을 없이 Mock객체를 던져준다').title, '친구 추천 쿠폰')
         self.assertFalse(User.objects.exists())
+
+    def test_avoid_foreign_obj(self):
+        coupon = Coupon()
+
+        self.assertEqual(coupon.owner)
 
 
 class TestPropertyMocking(unittest.TestCase):
